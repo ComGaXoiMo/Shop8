@@ -1,0 +1,78 @@
+﻿@model Model.EF.ProductCategory
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+@section Header{
+    Sửa Danh mục sản phẩm
+}
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Sửa Danh mục</h6>
+    </div>
+    <div class="card-body">
+        @using (Html.BeginForm("Edit", "ProductCategory", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+
+            <div class="form-group">
+                <h4>ProductCategory</h4>
+                <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group row">
+                    <div class="col-sm-6 mb-3 mb-sm-0">
+                        <label>Tên danh mục</label>
+                        @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label>Tên đường dẫn</label>
+
+                        @Html.TextBoxFor(model => model.MetaTitle, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.MetaTitle, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6 mb-3 mb-sm-0">
+
+                    </div>
+
+
+                    <div class="col-sm-6">
+
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Mô tả Danh mục sản phẩm</label>
+
+                    @Html.TextBoxFor(model => model.MetaDescriptions, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.MetaDescriptions, "", new { @class = "text-danger" })
+
+                </div>
+                <div class="col">
+                    <div class="custom-control custom-switch">
+                        @Html.CheckBoxFor(model => model.Status, new { @class = "custom-control-input", @id = "Status" })
+                        <label class="custom-control-label" for="Status">Kích hoạt</label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <center>
+                    <input type="submit" value="Sửa Danh mục sản phẩm" class="btn btn-primary" />
+                </center>
+            </div>
+        }
+    </div>
+</div>
+
+
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

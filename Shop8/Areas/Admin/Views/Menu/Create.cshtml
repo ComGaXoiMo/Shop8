@@ -1,0 +1,45 @@
+﻿@model Model.EF.Menu
+
+@{
+    ViewBag.Title = "Thêm mới Menu";
+    Layout = "/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+@section Header{
+    Menu
+}
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Thêm mới</h6>
+    </div>
+    <div class="card-body">
+        @using (Html.BeginForm("Create", "Menu", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+            <div class="form-group">
+                <label>Tên Menu</label>
+                @Html.TextBoxFor(model => model.Text, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Text)
+            </div>
+            <div class="form-group">
+                <label>Đường dẫn</label>
+                @Html.TextBoxFor(model => model.Link, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Link)
+            </div>
+            
+
+            <div class="form-group">
+                <div class="custom-control custom-switch">
+                    @Html.CheckBoxFor(model => model.Status, new { @class = "custom-control-input", @id = "Status" })
+                    <label class="custom-control-label" for="Status">Kích hoạt</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <center>
+                    <input type="submit" value="Thêm menu" class="btn btn-primary" />
+                </center>
+            </div>
+        }
+    </div>
+</div>

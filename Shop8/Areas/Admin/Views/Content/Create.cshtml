@@ -1,0 +1,93 @@
+﻿@model Model.EF.Content
+
+@{
+    ViewBag.Title = "Thêm mới tin tức";
+    Layout = "/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+@section jsFooter{
+    <script>
+        $('#btnImage').on('click', function (e) {
+            e.preventDefault();
+            var finder = new CKFinder();
+            finder.selectActionFunction = function (url) {
+                $('#txtImage').val(url);
+            };
+            finder.popup();
+        })
+
+        var editor = CKEDITOR.replace('txtContent');
+    </script>
+}
+
+@section Header{
+    Tin tức
+}
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Thêm mới</h6>
+    </div>
+    <div class="card-body">
+        @using (Html.BeginForm("Create", "Content", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-sm">
+                        <label>Tên tin tức</label>
+                        @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Name)
+                    </div>
+                    <div class="col-sm">
+                        <label>Mô tả</label>
+                        @Html.TextBoxFor(model => model.Description, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Description)
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-sm">
+                        <label>Tên đường dẫn</label>
+                        @Html.TextBoxFor(model => model.MetaTitle, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.MetaTitle)
+                    </div>
+                    <div class="col-sm">
+                        <label>Đường dẫn ảnh</label>
+                        <div class="input-group">
+                            @Html.TextBoxFor(model => model.Image, new { @class = "form-control", @id = "txtImage" })
+                            <div class="input-group-append">
+                                <a href="#" class="btn btn-primary" id="btnImage">Chọn ảnh</a>
+                            </div>
+                            @Html.ValidationMessageFor(model => model.Image)
+                        </div>
+                    </div>
+                    <div class="col-sm">
+                        @ViewBag.TopHot
+                        <label>Top Hot</label>
+                        @Html.TextBoxFor(model => model.TopHot, "{0:yyyy-MM-dd}", new { @class = "form-control", @type = "date" })
+                        @Html.ValidationMessageFor(model => model.TopHot)
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Chi tiết</label>
+                @Html.TextAreaFor(model => model.Detail, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Detail)
+            </div>
+
+            <div class="form-group">
+                <div class="custom-control custom-switch">
+                    @Html.CheckBoxFor(model => model.Status, new { @class = "custom-control-input", @id = "Status" })
+                    <label class="custom-control-label" for="Status">Kích hoạt</label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <center>
+                    <input type="submit" value="Tạo tin tức" class="btn btn-primary" />
+                </center>
+            </div>
+        }
+    </div>
+</div>

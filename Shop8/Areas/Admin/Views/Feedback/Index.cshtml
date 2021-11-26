@@ -1,0 +1,58 @@
+﻿@model PagedList.IPagedList<Model.EF.Feedback>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Danh Sách Phản Hồi";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+@section Header{
+    Phản hồi
+}
+@section jsFooter{
+    <script src="/Assets/Admin/js/controller/FeedbackController.js"></script>
+}
+<!-- DataTales Example -->
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <span class="m-0 font-weight-bold text-primary">
+            Danh sách
+        </span>
+
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+
+            @using (Html.BeginForm("Index", "Feedback", FormMethod.Get))
+            {
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Người gửi</th>
+                            <th>Thời gian gửi</th>
+
+                            <th style="text-align: center">Control</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.ID</td>
+                                <td>@item.Name</td>
+                                <td>@item.CreatedDate.Value.ToString("dd/MM/yyyy")</td>
+                                <td align="center">
+                                    <a href="/Admin/Feedback/View/@item.ID" class="btn btn-primary btn-circle btn-sm" title="Xem">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            }
+            @Html.PagedListPager(Model, page => Url.Action("Index", new { page, @searchString = @ViewBag.SearchString }))
+        </div>
+    </div>
+</div>

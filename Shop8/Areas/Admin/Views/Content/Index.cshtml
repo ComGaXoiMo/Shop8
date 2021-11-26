@@ -1,0 +1,105 @@
+﻿@model PagedList.IPagedList<Model.EF.Content>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Tin tức";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+@section Header{
+    Tin tức
+}
+@section jsFooter{
+    <script src="/Assets/Admin/js/controller/contentController.js"></script>
+}
+<!-- DataTales Example -->
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <span class="m-0 font-weight-bold text-primary">
+            Danh sách
+            <span style="float: right">
+
+                <a href="/admin/Content/create" class="btn btn-primary btn-icon-split">
+                    <span class="icon text-white-50">
+                        <i class="fas fa-plus"></i>
+                    </span>
+                    <span class="text">Thêm mới</span>
+                </a>
+
+            </span>
+        </span>
+
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+
+            @using (Html.BeginForm("Index", "Content", FormMethod.Get))
+            {
+                <div style="padding: 3px; margin-bottom: 20px; width: 24.5rem">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Tên tin tức" name="searchString" value="@ViewBag.SearchString">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" type="submit">
+                                <i class="fas fa-search fa-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
+
+
+
+
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Tên</th>
+                        <th>Mô tả</th>
+                        <th>Top Hot</th>
+                        <th>Trạng thái</th>
+                        <th style="text-align: center">Controls</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.Name</td>
+                            <td>@(item.Description != null ? item.Description : "Không có")</td>
+                            <td>@(item.TopHot != null ? item.TopHot.Value.ToString("dd/MM/yyyy") : "Tắt")</td>
+                            <td><a href="#" data-id="@item.ID" class="btn-active">@(item.Status == true ? "Kích hoạt" : "Khóa")</a></td>
+                            
+                            <td align="center">
+                                <a href="/Admin/Content/Edit/@item.ID" class="btn btn-primary btn-circle btn-sm" title="Sửa">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a href="/Admin/Content/Delete/@item.ID" class="btn btn-danger btn-circle btn-sm" title="Xóa" data-toggle="modal" data-target="#deleteEntity-@item.ID">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+
+                                <div class="modal fade" id="deleteEntity-@item.ID" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Xóa Tin Tức</h5>
+                                                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">×</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">Xóa tin tức này khỏi CSDL?</div>
+                                            <div class="modal-footer">
+                                                <button class="btn btn-secondary" type="button" data-dismiss="modal">Hủy</button>
+                                                <a class="btn btn-primary" href="/Admin/Content/Delete/@item.ID">Xóa</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+            @Html.PagedListPager(Model, page => Url.Action("Index", new { page, @searchString = @ViewBag.SearchString }))
+        </div>
+    </div>
+</div>

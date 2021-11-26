@@ -1,0 +1,96 @@
+﻿@model Model.EF.User
+
+@{
+    ViewBag.Title = "Tạo người dùng";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+@section header {
+    Thêm mới người dùng
+}
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Tạo mới</h6>
+    </div>
+    <div class="card-body">
+        @using (Html.BeginForm("Create", "User", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-group row">
+                <div class="col">
+                    <label>Tài khoản</label>
+                    @Html.TextBoxFor(model => model.Username, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Username)
+                </div>
+                <div class="col">
+                    <label>Mật khẩu</label>
+                    @Html.TextBoxFor(model => model.Password, new { @class = "form-control", @type = "Password" })
+                    @Html.ValidationMessageFor(model => model.Password)
+                </div>
+                <div class="col">
+                    <label>Họ tên</label>
+                    @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Name)
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col">
+                    <div class="row">
+                        <div class="col">
+                            <label>Số điện thoại</label>
+                            @Html.TextBoxFor(model => model.Phone, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Phone)
+                        </div>
+                        <div class="col">
+                            <label>Email</label>
+                            @Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Email)
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="row">
+                        <div class="col">
+                            <label>Giới tính</label>
+                            @Html.DropDownListFor(model => model.Gender, new SelectList(new[] { "Nam", "Nữ" }), new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Gender)
+                        </div>
+                        <div class="col">
+                            <label>Ngày sinh</label>
+                            @Html.TextBoxFor(model => model.DateOfBirth, "{0:yyyy-MM-dd}", new { @class = "form-control", @type = "date", @style = "width: 170px" })
+                            @Html.ValidationMessageFor(model => model.DateOfBirth)
+                        </div>
+                        <div class="col">
+                            <label>Phân quyền</label>
+                            @Html.DropDownListFor(model => model.GroupID, null, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.GroupID)
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Địa chỉ liên lạc</label>
+                @Html.TextBoxFor(model => model.Address, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Address)
+            </div>
+            <div class="form-group">
+                <div class="custom-control custom-switch">
+                    @Html.CheckBoxFor(model => model.Status, new { @class = "custom-control-input", @id = "Status" })
+                    <label class="custom-control-label" for="Status">Kích hoạt</label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <center>
+                    <input type="submit" value="Tạo" class="btn btn-primary" />
+                </center>
+            </div>
+        }
+    </div>
+</div>
+
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

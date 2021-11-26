@@ -1,0 +1,160 @@
+﻿@model List<Model.ViewModel.OrderViewModel>
+@{
+    ViewBag.Title = "Danh sách đơn hàng";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+@section Header{
+    Đơn hàng
+}
+@section jsFooter{
+    <script src="/Assets/Admin/js/controller/orderController.js"></script>
+}
+<!-- DataTales Example -->
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <span class="m-0 font-weight-bold text-primary">
+            Danh sách
+        </span>
+
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+
+            @using (Html.BeginForm("Index", "Order", FormMethod.Get))
+            {
+                <div style="padding: 3px; margin-bottom: 20px; width: 24.5rem">
+                    <div class="input-group">
+                        
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" type="submit">
+                                <i class="fas fa-search fa-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>ĐH</th>
+                        <th>Tên KH</th>
+                        <th>Tên sản phẩm</th>
+                        <th>SL</th>
+                        <th>Đơn giá</th>
+                        <th>Thành tiền</th>
+                        <th>Ngày tạo</th>
+                        <th>Trạng thái</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        var col = item.Products.Count() > 1 ? ("rowspan = " + item.Products.Count()) : ("");
+                        <tr>
+                            <td @col>@item.OrderID</td>
+                            <td @col>@item.CustomerName</td>
+                            <td>@item.Products[0].Name</td>
+                            <td>@item.Products[0].Quantity</td>
+                            <td>@(item.Products[0].Price.ToString("N0"))đ</td>
+                            <td @col>@(item.PriceTotal.ToString("N0"))đ</td>
+                            <td @col>@(item.CreatedDate != null ? item.CreatedDate.Value.ToString("dd/MM/yyyy") : "")</td>
+                            <td @col><a href="/Order/ChangeStatus/@item.OrderID" data-toggle="modal" data-target="#changeStatus-@item.OrderID">@(item.Status == true ? "Đã thanh toán" : "Chưa thanh toán")</a></td>
+
+                            <div class="modal fade" id="changeStatus-@item.OrderID" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Thay đổi trạng thái thanh toán</h5>
+                                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">×</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">Thay đổi trạng thái thanh toán của đơn hàng #@item.OrderID?</div>
+                                        <div class="modal-footer">
+                                            <button class="btn btn-secondary" type="button" data-dismiss="modal">Hủy</button>
+                                            <a class="btn btn-primary" href="/Admin/Order/ChangeStatus/@item.OrderID">Thay đổi</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </tr>
+                        for (int i = 1; i < item.Products.Count; i++)
+                        {
+                            <tr>
+                                <td>
+                                    @item.Products[i].Name
+                                </td>
+                                <td>
+                                    @item.Products[i].Quantity
+                                </td>
+                                <td>
+                                    @(item.Products[i].Price.ToString("N0"))đ
+                                </td>
+                            </tr>
+                        }
+                    }
+                    <!-- Phân trang -->
+                    @if (ViewBag.TotalPage > 1)
+                    {
+                        var pageDisplay = (int)(ViewBag.MaxPage);
+                        int totalPage = (int)ViewBag.TotalPage;
+                        int currentPage = ((int)ViewBag.Page);
+
+                        // Tạo link
+                        var startPageIndex = Math.Max(1, currentPage - pageDisplay / 2);
+                        var endPageIndex = Math.Min(totalPage, currentPage + pageDisplay / 2);
+
+                        var link = "";
+
+                        if (!String.IsNullOrEmpty(ViewBag.searchString))
+                        {
+                            link = "/Admin/Order/Index?searchString=" + @ViewBag.SearchString + "&page=";
+                        }
+                        else
+                        {
+                            link = "/Admin/Order/Index?page=";
+                        }
+                        <div class="dataTables_paginate paging_simple_numbers">
+                            <ul class="pagination">
+                                <li class="paginate_button page-item previous">
+                                    <a href="@link@ViewBag.First" title="Trang đầu" class="page-link"> << </a>
+                                </li>
+                                <li class="paginate_button page-item">
+                                    <a href="@link@ViewBag.Prev" title="Trang trước" class="page-link"> < </a>
+                                </li>
+                                @for (int i = startPageIndex; i <= endPageIndex; i++)
+                                {
+                                    if (currentPage == i)
+                                    {
+                                        <li class="paginate_button page-item active">
+                                            <a href="@link@i" class="page-link" title="Trang @i">@i</a>
+                                        </li>
+
+                                    }
+                                    else
+                                    {
+                                        <li class="paginate_button page-item">
+                                            <a href="@link@i" class="page-link" title="Trang @i">@i</a>
+                                        </li>
+                                    }
+                                }
+                                <li class="paginate_button page-item">
+                                    <a href="@link@ViewBag.Next" class="page-link" title="Trang sau"> > </a>
+                                </li>
+                                <li class="paginate_button page-item next">
+                                    <a href="@link@ViewBag.Last" class="page-link" title="Trang cuối"> >> </a>
+                                </li>
+                            </ul>
+                        </div>
+                    }
+                    else if (@ViewBag.TotalPage >= 0) { }
+                    else
+                    {
+                        <span>Không có đơn hàng nào</span>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,116 @@
+﻿@model Model.EF.Product
+
+@{
+    ViewBag.Title = "Thêm Mới Sản Phẩm";
+    Layout = "/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+@section Header{
+    Sản Phẩm
+}
+@section jsFooter{
+    <script>
+        $('#btnImage').on('click', function (e) {
+            e.preventDefault();
+            var finder = new CKFinder();
+            finder.selectActionFunction = function (url) {
+                $('#txtImage').val(url);
+            };
+            finder.popup();
+        })
+
+        var editor = CKEDITOR.replace('txtContent');
+    </script>
+}
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Sửa thông tin</h6>
+    </div>
+    <div class="card-body">
+        @using (Html.BeginForm("Edit", "Product", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+            <div class="form-group">
+                <div class="col-sm-6">
+                    <label>Tên sản phẩm</label>
+                    @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Name)
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Mô tả</label>
+                @Html.TextBoxFor(model => model.Description, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Description)
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col">
+                        <label>Đường dẫn</label>
+                        @Html.TextBoxFor(model => model.MetaTitle, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.MetaTitle)
+                    </div>
+                    <div class="col">
+                        <label>Ảnh</label>
+                        <div class="input-group">
+                            @Html.TextBoxFor(model => model.Image, new { @class = "form-control", @id = "txtImage" })
+                            <div class="input-group-append">
+                                <a href="#" class="btn btn-primary" id="btnImage">Chọn ảnh</a>
+                            </div>
+                        </div>
+                        @Html.ValidationMessageFor(model => model.Image)
+                    </div>
+                    <div class="col">
+                        <label>Danh mục</label>
+                        @Html.DropDownListFor(model => model.CategoryID, null, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.CategoryID)
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col">
+                        <label>Giá</label>
+                        @Html.TextBoxFor(model => model.Price, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Price)
+                    </div>
+                    <div class="col">
+                        <label>Giá khuyến mãi</label>
+                        @Html.TextBoxFor(model => model.PromotionPrice, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.PromotionPrice)
+                    </div>
+                    <div class="col">
+                        <label>Số lượng</label>
+                        @Html.TextBoxFor(model => model.Quantity, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Quantity)
+                    </div>
+                    <div class="col">
+                        <label>Top Hot</label>
+                        @Html.TextBoxFor(model => model.TopHot, "{0:yyyy-MM-dd}", new { @class = "form-control", @type = "date" })
+                        @Html.ValidationMessageFor(model => model.TopHot)
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Nội dung</label>
+                @Html.TextAreaFor(model => model.Detail, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Detail)
+            </div>
+            <div class="form-group">
+                <div class="custom-control custom-switch">
+                    @Html.CheckBoxFor(model => model.Status, new { @class = "custom-control-input", @id = "Status" })
+                    <label class="custom-control-label" for="Status">Kích hoạt</label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <center>
+                    <input type="submit" value="Sửa sản phẩm" class="btn btn-primary" />
+                </center>
+            </div>
+        }
+    </div>
+</div>
