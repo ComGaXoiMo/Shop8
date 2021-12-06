@@ -51,7 +51,7 @@ namespace Shop8.Areas.Admin.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError("", "Thêm productCategory Thất bại.");
+                    ModelState.AddModelError("", "Thêm Menu Thất bại.");
                 }
             }
             return View();
@@ -70,7 +70,7 @@ namespace Shop8.Areas.Admin.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError("", "Thêm productCategory Thất bại.");
+                    ModelState.AddModelError("", "Sửa menu Thất bại.");
                 }
             }
             return View();

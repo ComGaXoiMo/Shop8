@@ -1,4 +1,5 @@
 ﻿using Model.Dao;
+using Model.EF;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,14 +14,14 @@ namespace Shop8.Areas.Admin.Controllers
         public ActionResult Index(string searchString, int page = 1, int pageSize = 5)
         {
             ViewBag.SearchString = searchString; // Tìm kiếm
-            int totalRecord = 0; // Tổng số bản ghi
+            int totalRecord = 0; 
 
             var dao = new OrderDao().ListAllPaging(searchString, ref totalRecord, page, pageSize); // Get DS Đơn Hàng
             ViewBag.Total = totalRecord;
             ViewBag.Page = page;
 
-            int maxPage = 5; // Trang hiển thị tối đa
-            int totalPage = 0; // Tổng số trang
+            int maxPage = 5; 
+            int totalPage = 0; 
 
             totalPage = (int)Math.Ceiling((double)(totalRecord / pageSize));
             ViewBag.TotalPage = totalPage;
@@ -34,7 +35,10 @@ namespace Shop8.Areas.Admin.Controllers
 
             return View(dao);
         }
+        public ActionResult infoCustomer(Order oder)
+        {
+            return View();
+        }
 
-        
     }
 }
